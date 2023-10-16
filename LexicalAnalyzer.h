@@ -2,6 +2,7 @@
 #define LEXICALANALYZER_H
 
 #include <fstream>
+#include <unordered_map>
 
 #include "Token.h"
 #include "TokenCodes.h"
@@ -15,6 +16,7 @@ private:
     int currentCharIndex;
     ifstream *sourceCodeFile; //A pointer to the ifstream representing the source code file.
     string line; //Contains the current line of source code being analyzed.
+    unordered_map<string,TokenCodes> reservedWords;
 
 
     bool isEOI(); //Checks if the end of the input file has been reached.
@@ -23,6 +25,12 @@ private:
     bool isWhiteSpace(); //checks if current character is whitespace
     void skipWhiteSpace(); //skips over any whitespace
     Token* getArithmeticOrParenToken();
+    bool isLetter();
+    bool isDigit();
+    Token* getMultiCharSymbol();
+    Token* getReservedWord();
+    Token* getIdentifier();
+    Token* getNumericLiteral();
 
 public:
     //constructor that initializes the LexicalAnalyzer object with a file stream pointer
