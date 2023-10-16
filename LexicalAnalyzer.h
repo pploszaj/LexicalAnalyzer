@@ -20,7 +20,9 @@ private:
     bool isEOI(); //Checks if the end of the input file has been reached.
     void readNextLine(); //Reads the next line from the source code file.
     void getNextChar(); // Gets the next character from the line or reads the next line if needed.
-
+    bool isWhiteSpace(); //checks if current character is whitespace
+    void skipWhiteSpace(); //skips over any whitespace
+    Token* getArithmeticOrParenToken();
 
 public:
     //constructor that initializes the LexicalAnalyzer object with a file stream pointer

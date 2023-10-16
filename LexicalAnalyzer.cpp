@@ -40,11 +40,59 @@ void LexicalAnalyzer::getNextChar()
     currentChar = line.at(currentCharIndex);
 }
 
+bool LexicalAnalyzer::isWhiteSpace() {
+    return (currentChar == ' ' || currentChar == '\t' || currentChar == '\n');
+}
+
+void LexicalAnalyzer::skipWhiteSpace() {
+    while(!isEOI() && isWhiteSpace()){
+        getNextChar();
+    }
+}
+
+Token* LexicalAnalyzer::getArithmeticOrParenToken() {
+    switch (currentChar) {
+        case '+':
+            getNextChar();
+            return new Token(PLUS, "+");
+        case '-':
+            getNextChar();
+            return new Token(MINUS, "-");
+        case '*':
+            getNextChar();
+            return new Token(TIMES, "*");
+        case '/':
+            getNextChar();
+            return new Token(SLASH, "/");
+        case '%':
+            getNextChar();
+            return new Token(MOD, "%");
+        case '(':
+            getNextChar();
+            return new Token(LPAREN, "(");
+        case ')':
+            getNextChar();
+            return new Token(RPAREN, ")");
+        default:
+            return nullptr;
+    }
+}
+
 Token* LexicalAnalyzer::getNextToken()
 {
     Token *t;
 
+    skipWhiteSpace();
 
+    if(isEOI()) {
+        t = new Token(EOI, "EOI");
+        return t;
+    }
+
+    t = getArithmeticOrParenToken();
+    if(t != nullptr){
+        return t;
+    }
 
     return t;
 }
