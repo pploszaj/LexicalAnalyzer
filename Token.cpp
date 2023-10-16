@@ -6,18 +6,21 @@
 
 using namespace std;
 
+//constructor
 Token::Token()
 {
-    setTokenCode(NAL);
-    setLexemeString("");
+    setTokenCode(NAL); //initializes token with a code of NAL
+    setLexemeString(""); //initialized token with an empty lexeme string
 }
 
+//constructor that takes in token code and lexeme string
 Token::Token(TokenCodes tc, string ls)
 {
     setTokenCode(tc);
     setLexemeString(ls);
 }
 
+//getters and setters
 string Token::getLexemeString()
 {
     return lexemeString;

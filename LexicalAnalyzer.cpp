@@ -7,15 +7,16 @@
 
 using namespace std;
 
+//constructor
 LexicalAnalyzer::LexicalAnalyzer(ifstream *scf)
 {
     currentChar = '\n';
     currentCharIndex = 0;
     sourceCodeFile = scf;
     line = "\n";
-
 }
 
+//checks if reached the end of the source code file
 bool LexicalAnalyzer::isEOI()
 {
     return (sourceCodeFile->eof() && (currentCharIndex == (line.length() - 1)));

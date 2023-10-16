@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <string>
-
 #include "TokenCodes.h"
 
 using namespace std;
@@ -11,8 +10,8 @@ using namespace std;
 class Token
 {
 private:
-    string lexemeString;
-    TokenCodes tokenCode;
+    string lexemeString; //to store actual string representation of token
+    TokenCodes tokenCode; //to store the type of token
 
 public:
     Token();
