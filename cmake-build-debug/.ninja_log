@@ -1,0 +1,5 @@
+# ninja log v5
+1	7093	1697580666458110740	CMakeFiles/LexicalAnalyzer.dir/Token.cpp.o	a936856849c8d8b6
+0	7315	1697580666676752407	CMakeFiles/LexicalAnalyzer.dir/Assignment1.cpp.o	71c25a5ccc39a533
+0	7573	1697580666941444615	CMakeFiles/LexicalAnalyzer.dir/LexicalAnalyzer.cpp.o	315882f8b0aa528b
+7573	8196	1697580667568808750	LexicalAnalyzer	c9816b588bbc55f7

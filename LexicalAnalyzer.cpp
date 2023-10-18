@@ -45,6 +45,8 @@ void LexicalAnalyzer::readNextLine()
 
 void LexicalAnalyzer::getNextChar()
 {
+//    cout << "Current char: " << currentChar << endl;
+
     if (currentCharIndex == (line.length() - 1))
     {
         readNextLine();
@@ -118,7 +120,7 @@ Token* LexicalAnalyzer::getArithmeticOrParenToken() {
 }
 
 bool LexicalAnalyzer::isLetter() {
-    return (currentChar >= 'A' || currentChar <= 'Z' || currentChar >= 'a' || currentChar <= 'z');
+    return ((currentChar >= 'A' && currentChar <= 'Z') || (currentChar >= 'a' && currentChar <= 'z'));
 }
 
 bool LexicalAnalyzer::isDigit() {
@@ -126,53 +128,50 @@ bool LexicalAnalyzer::isDigit() {
 }
 
 Token* LexicalAnalyzer::getMultiCharSymbol() {
-    switch (currentChar) {
+    char initialChar = currentChar;
+    getNextChar();
+    switch (initialChar) {
         case '|':
-            getNextChar();
             if(currentChar == '|'){
                 getNextChar();
                 return new Token(OR, "||");
             }
-            break;
+            return nullptr;
         case '&':
-            getNextChar();
             if(currentChar == '&'){
                 getNextChar();
                 return new Token(AND, "&&");
             }
-            break;
+            return nullptr;
         case '=':
-            getNextChar();
             if(currentChar == '='){
                 getNextChar();
                 return new Token(EQL, "==");
             }
-            break;
+            return nullptr;
         case '!':
-            getNextChar();
             if(currentChar == '='){
                 getNextChar();
                 return new Token(NEQ, "!=");
             }
-            break;
+            return nullptr;
         case '<':
-            getNextChar();
             if(currentChar == '='){
                 getNextChar();
                 return new Token(LEQ, "<=");
             }
-            break;
+            return nullptr;
         case '>':
-            getNextChar();
             if(currentChar == '='){
                 getNextChar();
                 return new Token(GEQ, ">=");
             }
-            break;
-        default:
             return nullptr;
-
     }
+
+    currentChar = initialChar;
+    currentCharIndex--;
+    return nullptr;
 }
 
 Token* LexicalAnalyzer::getReservedWord() {
@@ -186,6 +185,8 @@ Token* LexicalAnalyzer::getReservedWord() {
     if(reservedWords.find(lexeme) != reservedWords.end()) {
         return new Token(reservedWords[lexeme], lexeme);
     }
+
+    return nullptr;
 }
 
 Token* LexicalAnalyzer::getIdentifier() {
@@ -234,6 +235,16 @@ Token* LexicalAnalyzer::getNextToken()
         return t;
     }
 
+    t = getNumericLiteral();
+    if(t != nullptr){
+        return t;
+    }
+
+    t = getIdentifier();
+    if(t != nullptr) {
+        return t;
+    }
+
     t = getMultiCharSymbol();
     if(t != nullptr){
         return t;
@@ -244,21 +255,11 @@ Token* LexicalAnalyzer::getNextToken()
         return t;
     }
 
-
     t = getReservedWord();
     if(t != nullptr) {
         return t;
     }
 
-    t = getIdentifier();
-    if(t != nullptr) {
-        return t;
-    }
-
-    t = getNumericLiteral();
-    if(t != nullptr){
-        return t;
-    }
 
     string lexeme(1, currentChar);
     getNextChar();
