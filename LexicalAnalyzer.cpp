@@ -45,8 +45,6 @@ void LexicalAnalyzer::readNextLine()
 
 void LexicalAnalyzer::getNextChar()
 {
-//    cout << "Current char: " << currentChar << endl;
-
     if (currentCharIndex == (line.length() - 1))
     {
         readNextLine();
@@ -102,21 +100,11 @@ Token* LexicalAnalyzer::getArithmeticOrParenToken() {
         case ';':
             getNextChar();
             return new Token(SEMICOLON, ";");
-        case '=':
-            getNextChar();
-            return new Token(ASSIGN, "=");
         case '!':
             getNextChar();
             return new Token(NOT, "!");
-        case '<':
-            getNextChar();
-            return new Token(LSS, "<");
-        case '>':
-            getNextChar();
-            return new Token(GTR, ">");
-        default:
-            return nullptr;
-    }
+        }
+        return nullptr;
 }
 
 bool LexicalAnalyzer::isLetter() {
@@ -147,8 +135,9 @@ Token* LexicalAnalyzer::getMultiCharSymbol() {
             if(currentChar == '='){
                 getNextChar();
                 return new Token(EQL, "==");
+            } else {
+                return new Token(ASSIGN, "=");
             }
-            return nullptr;
         case '!':
             if(currentChar == '='){
                 getNextChar();
@@ -160,17 +149,21 @@ Token* LexicalAnalyzer::getMultiCharSymbol() {
                 getNextChar();
                 return new Token(LEQ, "<=");
             }
-            return nullptr;
+            else {
+                return new Token(LSS, "<");
+            }
         case '>':
             if(currentChar == '='){
                 getNextChar();
                 return new Token(GEQ, ">=");
             }
-            return nullptr;
+            else {
+                return new Token(GTR, ">");
+            }
     }
 
-    currentChar = initialChar;
-    currentCharIndex--;
+    --currentCharIndex;
+    currentChar = line.at(currentCharIndex);
     return nullptr;
 }
 
@@ -199,9 +192,52 @@ Token* LexicalAnalyzer::getIdentifier() {
 
     if(!lexeme.empty()){
         for(auto & c: lexeme) c = tolower(c);
-        return new Token(IDENT, lexeme);
+        if(lexeme == "bool"){
+            return new Token(BOOLSYM, lexeme);
+        }
+        if(lexeme == "do"){
+            return new Token(DOSYM, lexeme);
+        }
+        if(lexeme == "else"){
+            return new Token(ELSESYM, lexeme);
+        }
+        if(lexeme == "false"){
+            return new Token(FALSESYM, lexeme);
+        }
+        if(lexeme == "float"){
+            return new Token(FLOATSYM, lexeme);
+        }
+        if(lexeme == "for"){
+            return new Token(FORSYM, lexeme);
+        }
+        if(lexeme == "if"){
+            return new Token(IFSYM, lexeme);
+        }
+        if(lexeme == "int"){
+            return new Token(INTSYM, lexeme);
+        }
+        if(lexeme == "printf"){
+            return new Token(PRINTFSYM, lexeme);
+        }
+        if(lexeme == "return"){
+            return new Token(RETURNSYM, lexeme);
+        }
+        if(lexeme == "scanf"){
+            return new Token(SCANFSYM, lexeme);
+        }
+        if(lexeme == "true"){
+            return new Token(TRUESYM, lexeme);
+        }
+        if(lexeme == "void"){
+            return new Token(VOIDSYM, lexeme);
+        }
+        if(lexeme == "while"){
+            return new Token(WHILESYM, lexeme);
+        }
+        else {
+            return new Token(IDENT, lexeme);
+        }
     }
-
     return nullptr;
 }
 
@@ -260,6 +296,9 @@ Token* LexicalAnalyzer::getNextToken()
         return t;
     }
 
+    if(currentChar == '='){
+        return new Token(ASSIGN, "=");
+    }
 
     string lexeme(1, currentChar);
     getNextChar();
